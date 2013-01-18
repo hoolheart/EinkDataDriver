@@ -1,12 +1,13 @@
 //============================================================================
 // Name        : EinkDataDiver.cpp
-// Author      : Edward
+// Author      : Edward Chou
 // Version     :
 // Copyright   : 
-// Description : Hello World in C++, Ansi-style
+// Description : Data Driven Toolbox
 //============================================================================
 
 #include <iostream>
+#include "GlobalHeader.h"
 using namespace std;
 
 int main() {
