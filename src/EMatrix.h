@@ -93,6 +93,21 @@ public:
     EMatrixT & operator*=(const EMatrixT &_m) _THROW_ERROR;
     EMatrixT & operator*=(T c) _NO_THROW;
     EMatrixT & operator/=(T c) _THROW_ERROR;
+
+    /*
+     * Other operators
+     */
+public:
+    bool isSquare() {
+    	if ((row!=0)&&(row==col))
+    		return true;
+    	else
+    		return false;
+    }
+    void det() {
+    	if(!isSquare())
+    		reportErr("Matrix determinant error: not square!");
+    }
 };
 
 MAT_TEMPLATE
