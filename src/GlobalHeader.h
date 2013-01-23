@@ -11,6 +11,6 @@
 #include "EException.h"
 #include "EVector.h"
 #include "EMatrix.h"
-#include "Eigen/Core"
+#include "Eigen/Eigen"
 
 #endif /* GLOBALHEADER_H_ */
