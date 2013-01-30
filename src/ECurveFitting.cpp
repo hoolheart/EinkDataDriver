@@ -7,6 +7,8 @@
 
 #include "ECurveFitting.h"
 #include <math.h>
+//#include <iostream>
+//using namespace std;
 
 ECurveFitting::ECurveFitting() {
 	// TODO Auto-generated constructor stub
@@ -37,8 +39,9 @@ bool ECurveFitting::linearFitting() {
 	if(checkDimension(dat,obj)) {
 		solved = solveLinearFitting(dat,obj);
 	}
-	else
+	else {
 		hasErr = true;
+	}
 	return solved;
 }
 
@@ -60,11 +63,12 @@ bool ECurveFitting::solveLinearFitting(const EMat& X, const EVec& y) {
 		rst = P.colPivHouseholderQr().solve(b);
 	}
 	else {
-		EMat I = P.diagonal();
+		// apply Levenberg¨CMarquardt algorithm
+		EMat I = P.diagonal().asDiagonal();
 		EVec beta = EVec::Ones(m+1);
 		// try lambda
-		EVec d = (P+lambda*I).colPivHouseholderQr().solve(y-J*beta);
-		EVec d2 = (P+lambda/v*I).colPivHouseholderQr().solve(y-J*beta);
+		EVec d = (P+lambda*I).colPivHouseholderQr().solve(J.transpose()*(y-J*beta));
+		EVec d2 = (P+lambda/v*I).colPivHouseholderQr().solve(J.transpose()*(y-J*beta));
 		double dS = (d.transpose()*P*d+2*beta.transpose()*P*d-2*y.transpose()*J*d)(0,0);
 		double dS2 = (d2.transpose()*P*d2+2*beta.transpose()*P*d2-2*y.transpose()*J*d2)(0,0);
 		double l;
@@ -79,7 +83,7 @@ bool ECurveFitting::solveLinearFitting(const EMat& X, const EVec& y) {
 			int i;
 			for (i=0;i<10;i++) {
 				l *= v;
-				d = (P+l*I).colPivHouseholderQr().solve(y-J*beta);
+				d = (P+l*I).colPivHouseholderQr().solve(J.transpose()*(y-J*beta));
 				dS = (d.transpose()*P*d+2*beta.transpose()*P*d-2*y.transpose()*J*d)(0,0);
 				if (dS<0) break;
 			}
@@ -91,7 +95,7 @@ bool ECurveFitting::solveLinearFitting(const EMat& X, const EVec& y) {
 		int i;
 		for (i=0;i<1000;i++) {
 			beta += d;
-			d = (P+l*I).colPivHouseholderQr().solve(y-J*beta);
+			d = (P+l*I).colPivHouseholderQr().solve(J.transpose()*(y-J*beta));
 			dS = (d.transpose()*P*d+2*beta.transpose()*P*d-2*y.transpose()*J*d)(0,0);
 			if (fabs(dS)<err) break;
 		}
@@ -102,7 +106,8 @@ bool ECurveFitting::solveLinearFitting(const EMat& X, const EVec& y) {
 		rst = beta+d;
 	}
 	EVec e = y-J*rst;
-	s = sqrt(e.transpose()*e);
+	s = (e.transpose()*e)(0,0);
+	s = sqrt(s);
 	return true;
 }
 
