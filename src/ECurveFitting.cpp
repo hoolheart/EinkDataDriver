@@ -107,7 +107,7 @@ bool ECurveFitting::solveLinearFitting(const EMat& X, const EVec& y) {
 	}
 	EVec e = y-J*rst;
 	s = (e.transpose()*e)(0,0);
-	s = sqrt(s);
+	s = sqrt(s/(n-1));
 	return true;
 }
 

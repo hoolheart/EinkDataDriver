@@ -11,5 +11,6 @@
 //#include "Eigen/Dense"
 #include "type_def.h"
 #include "ECurveFitting.h"
+#include "EInterpolation.h"
 
 #endif /* TEST_H_ */
