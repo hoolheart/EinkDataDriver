@@ -47,6 +47,9 @@ public:
 	bool linearFitting();
 	bool polynomialFitting(int d);
 	bool functionFitting(double (*foo[])(EVec),int d);
+	void setParameters(double _lambda, double _err=0.001) {
+		lambda = _lambda; err = _err;
+	}
 private:
 	bool checkDimension(const EMat& _d, const EVec& _o);
 	bool solveLinearFitting(const EMat& x, const EVec& y);

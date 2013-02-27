@@ -43,6 +43,13 @@ void testInterpolation() {
 	else {
 		cout << solver.getError() << endl;
 	}
+	if(solver.thirdOrderSplineInterpolation(EInterpolation::natural)) {
+		cout << "Result is" << endl;
+		cout << solver.getResult() << endl;
+	}
+	else {
+		cout << solver.getError() << endl;
+	}
 }
 
 void testEigen() {

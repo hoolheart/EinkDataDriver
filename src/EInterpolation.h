@@ -20,7 +20,6 @@ using namespace std;
  *     error, the existing errors;
  *     x, the x vector;
  *     y, the y vector;
- *     f, the y' vector;
  *     rst, the solved matrix results.
  * Functions:
  *     linearInterpolation, solve linear interpolation problem;
@@ -33,7 +32,7 @@ private:
 	bool solved;
 	bool hasErr;
 	string error;
-	EVec x,y,f;
+	EVec x,y;
 	EMat rst;
 public:
 	EInterpolation();
@@ -49,17 +48,15 @@ public:
 		y.resize(_y.rows());
 		y = _y;
 	}
-	void setYDifferential(const EVec &_f) {
-		f.resize(_f.rows());
-		f = _f;
-	}
+	typedef enum SplineType {
+		natural
+	}SPLINE_TYPE;
 	EMat getResult() const {return rst;}
 	bool linearInterpolation();
-	bool thirdOrderSplineInterpolation();
+	bool thirdOrderSplineInterpolation(SPLINE_TYPE type);
 	double getValue(double p);
 private:
 	void linear2Point(double x1, double x2, double y1, double y2, double &a0, double &a1);
-	void epline2Point(int i, int j);
 };
 
 #endif /* EINTERPOLATION_H_ */
