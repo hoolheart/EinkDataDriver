@@ -49,12 +49,13 @@ public:
 		y = _y;
 	}
 	typedef enum SplineType {
-		natural
+		natural,clamped,complete,periodic
 	}SPLINE_TYPE;
 	EMat getResult() const {return rst;}
 	bool linearInterpolation();
-	bool thirdOrderSplineInterpolation(SPLINE_TYPE type);
+	bool thirdOrderSplineInterpolation(SPLINE_TYPE type,double arg[]);
 	double getValue(double p);
+	EVec getValue(EVec p);
 private:
 	void linear2Point(double x1, double x2, double y1, double y2, double &a0, double &a1);
 };

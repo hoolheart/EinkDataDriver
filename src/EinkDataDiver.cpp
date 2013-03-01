@@ -23,6 +23,9 @@ int main() {
 //	testCurveFitting();
 	testInterpolation();
 
+	string tmp;
+	cin >> tmp;
+	cout << tmp;
 	return 0;
 }
 
@@ -39,13 +42,29 @@ void testInterpolation() {
 	if(solver.linearInterpolation()) {
 		cout << "Result is" << endl;
 		cout << solver.getResult() << endl;
+		cout << "Result of y is" << endl;
+		cout << solver.getValue(x) << endl;
 	}
 	else {
 		cout << solver.getError() << endl;
 	}
-	if(solver.thirdOrderSplineInterpolation(EInterpolation::natural)) {
+	if(solver.thirdOrderSplineInterpolation(EInterpolation::natural,NULL)) {
 		cout << "Result is" << endl;
 		cout << solver.getResult() << endl;
+		cout << "Result of y is" << endl;
+		cout << solver.getValue(x) << endl;
+	}
+	else {
+		cout << solver.getError() << endl;
+	}
+//	double arg[2] = [0,0];
+	double *arg = new double[2];
+	arg[0] = 0; arg[1] = 0;
+	if(solver.thirdOrderSplineInterpolation(EInterpolation::complete,arg)) {
+		cout << "Result is" << endl;
+		cout << solver.getResult() << endl;
+		cout << "Result of y is" << endl;
+		cout << solver.getValue(x) << endl;
 	}
 	else {
 		cout << solver.getError() << endl;

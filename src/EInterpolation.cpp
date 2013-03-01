@@ -46,7 +46,7 @@ void EInterpolation::linear2Point(double x1, double x2, double y1, double y2, do
 	a0 = k(0); a1 = k(1);
 }
 
-bool EInterpolation::thirdOrderSplineInterpolation(SPLINE_TYPE type) {
+bool EInterpolation::thirdOrderSplineInterpolation(SPLINE_TYPE type,double arg[]) {
 	solved = false; hasErr = false;
 	int n = x.rows()-1;
 	if(y.rows()!=n+1) {
@@ -71,6 +71,24 @@ bool EInterpolation::thirdOrderSplineInterpolation(SPLINE_TYPE type) {
 		A(n,n-1) = 1.0/(x(n)-x(n-1));
 		A(n,n) = 2.0/(x(n)-x(n-1));
 		b(n) = 3.0*(y(n)-y(n-1))/(x(n)-x(n-1))/(x(n)-x(n-1));
+		break;
+	case clamped:
+	case complete:
+		A(0,0) = 1; b(0) = arg[0];
+		A(n,n) = 1; b(n) = arg[1];
+		break;
+	case periodic:
+		if(y(0)!=y(n)) {
+			error = "y(0)!=y(n)\r\nThe periodic spline interpolation can not be performed";
+			hasErr = true;
+			return false;
+		}
+		A(0,0) = 1; A(0,n) = -1; b(0) = 0;
+		A(n,0) = 2.0/(x(1)-x(0));
+		A(n,1) = 1.0/(x(1)-x(0));
+		A(n,n-1) = 1.0/(x(n)-x(n-1));
+		A(n,n) = 2.0/(x(n)-x(n-1));
+		b(n) = 3.0*(y(n)-y(n-1))/(x(n)-x(n-1))/(x(n)-x(n-1))+3.0*(y(1)-y(0))/(x(1)-x(0))/(x(1)-x(0));
 		break;
 	default:
 		error = "Unknown type!";
@@ -118,4 +136,12 @@ double EInterpolation::getValue(double p) {
 		v += (double)rst(i,m)*pow(p,i);
 	}
 	return v;
+}
+
+EVec EInterpolation::getValue(EVec p) {
+	EVec f(p.rows());
+	for (int i=0;i<p.rows();i++) {
+		f(i) = getValue((double)p(i));
+	}
+	return f;
 }
