@@ -19,6 +19,9 @@ typedef Matrix3d EMat3;
 typedef Vector3d EVec3;
 typedef Matrix4d EMat4;
 typedef Vector4d EVec4;
+#else
+#include "EMatrix.h"
+typedef EMatrix EMat;
 #endif
 
 #endif /* TYPE_DEF_H_ */

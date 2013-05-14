@@ -8,7 +8,8 @@
 #ifndef TEST_H_
 #define TEST_H_
 
-//#include "Eigen/Dense"
+// #include "Eigen/Dense"
+// #define NOT_EIGEN
 #include "type_def.h"
 #include "ECurveFitting.h"
 #include "EInterpolation.h"
