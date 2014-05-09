@@ -11,6 +11,11 @@
 #include <string>
 using namespace std;
 
+/**
+ * class: EConvexOpt
+ * objective: solve convex optimization problems
+ */
+
 class EConvexOpt {
 public:
 	EConvexOpt();
