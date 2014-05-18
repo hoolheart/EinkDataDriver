@@ -13,5 +13,6 @@
 #include "type_def.h"
 #include "ECurveFitting.h"
 #include "EInterpolation.h"
+#include "EConvexOpt.h"
 
 #endif /* TEST_H_ */

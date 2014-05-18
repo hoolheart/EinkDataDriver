@@ -9,6 +9,7 @@
 #define ECONVEXOPT_H_
 #include "type_def.h"
 #include <string>
+#include <vector>
 using namespace std;
 
 /**
@@ -24,7 +25,7 @@ using namespace std;
  *     isFeasible - the flag whether the problem is feasible
  *     isSolved - the flag whether the problem is solved
  *     hasErr - the flag whether there is any error in the process of solving
- *     error - the string describing the error
+ *     errors - the strings describing the errors
  * Methods:
  *     setXDim - set the dimension of the variable x
  */
@@ -46,7 +47,7 @@ public:
 	/**
 	 * CONSTRAINT_EQU_TYPE: the type of equality constraint
 	 * equ_hyperplane: Ax=b
-	 * equ_func: f(x)=b
+	 * equ_func: f(x)=0
 	 * equ_dfunc: reserved
 	 */
 	typedef enum EquConstraintType {
@@ -65,6 +66,15 @@ public:
 	typedef enum InequConstraintType {
 		in_polyhedron,in_upbound,in_lowbound,in_lmi,in_quadratic,in_func,in_dfunc
 	}CONSTRAINT_INEQU_TYPE;
+	typedef struct LinearFunc {
+		EMat A;
+		EVec b;
+	}FUNC_LINEAR;
+	typedef struct QuadratricFunc {
+		EMat P;
+		EVec b;
+		EVec c;
+	}FUNC_QUADRATRIC;
 private:
 	typedef struct ObjVal {
 		OBJ_TYPE type;
@@ -79,17 +89,37 @@ private:
 		void * dat;
 	}INEQU_CONSTRAINT;
 	OBJ_VAL obj;
-	EQU_CONSTRAINT equCons[];
-	INEQU_CONSTRAINT inequCons[];
+	vector<EQU_CONSTRAINT*> equCons;
+	vector<INEQU_CONSTRAINT*> inequCons;
 	int xDim;
+	EVec x0;
 	EVec x_opt;
 	double p_opt;
+	bool hasObjective;
 	bool isFeasible;
 	bool isSolved;
-	bool hasErr;
-	string error;
+	vector<string> errors;
+	void addError(const string & err) {errors.push_back(err);}
 public:
-	bool setXDim(int _dim);
+	bool hasError() {return !errors.empty();}
+	string popError() {
+		string err="";
+		if (!errors.empty()) {
+			err = errors.back();
+			errors.pop_back();
+		}
+		return err;
+	}
+	//bool setXDim(int _dim);
+	void setObjective(OBJ_TYPE _t, void * _d);
+	void removeObjective();
+	void addEquConstraint(CONSTRAINT_EQU_TYPE _t, void * _d);
+	void addInequConstraint(CONSTRAINT_INEQU_TYPE _t, void * _d);
+	void removeAllConstraints();
+	void setInitialX(const EVec &_x) {
+		x0 = _x; xDim = (int)_x.rows();
+		if(!isSolved) x_opt = _x;
+	}
 };
 
 #endif /* ECONVEXOPT_H_ */

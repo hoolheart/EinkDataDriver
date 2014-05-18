@@ -14,6 +14,7 @@ using namespace std;
 void testEigen();
 void testCurveFitting();
 void testInterpolation();
+void testConvexOpt();
 
 int main() {
 	cout << "!!!Hello World!!!" << endl; // prints !!!Hello World!!!
@@ -27,6 +28,10 @@ int main() {
 	cin >> tmp;
 	cout << tmp;
 	return 0;
+}
+
+void testConvexOpt() {
+	EConvexOpt cvxSolver;
 }
 
 void testInterpolation() {
